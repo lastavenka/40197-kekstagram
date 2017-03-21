@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Наташа Ластовенко](https://up.htmlacademy.ru/javascript/9/user/40197).
-* Наставник: `Неизвестно`.
+* Наставник: Виталий Зюзин.
 
 ---
 
