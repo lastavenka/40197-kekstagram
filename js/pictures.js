@@ -24,18 +24,16 @@ var getPictures = function (arrSize) {
   return picturesList;
 };
 
-// Создание DOM-элемента на основе JS-объекта
 var pictureTemplate = document.querySelector('#picture-template').content;
 var renderPicture = function (picture) {
   var pictureElement = pictureTemplate.cloneNode(true);
 
-  pictureElement.getElementsByTagName('img').src = picture.url;
+  pictureElement.querySelector('img').src = picture.url;
   pictureElement.querySelector('.picture-likes').textContent = picture.likes;
   pictureElement.querySelector('.picture-comments').textContent = picture.comments;
   return pictureElement;
 };
 
-// Заполнение блока DOM-элементами на основе массива JS-объектов
 var createPicturesList = function (arr, renderFunction, container) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < arr.length; i++) {
@@ -47,9 +45,13 @@ var createPicturesList = function (arr, renderFunction, container) {
 var pictures = document.querySelector('.pictures');
 createPicturesList(getPictures(picturesNumber), renderPicture, pictures);
 
-var galleryOverlay = document.querySelector('.gallery-overlay');
+var showGalleryOverlay = function (picturesArr, index) {
+  var galleryOverlay = document.querySelector('.gallery-overlay');
 
-galleryOverlay.classList.remove('invisible');
-galleryOverlay.querySelector('.gallery-overlay-image').src = getPictures(picturesNumber)[0].url;
-galleryOverlay.querySelector('.likes-count').textContent = getPictures(picturesNumber)[0].likes;
-galleryOverlay.querySelector('.comments-count').textContent = getPictures(picturesNumber)[0].comments;
+  galleryOverlay.querySelector('.gallery-overlay-image').src = picturesArr[index].url;
+  galleryOverlay.querySelector('.likes-count').textContent = picturesArr[index].likes;
+  galleryOverlay.querySelector('.comments-count').textContent = picturesArr[index].comments;
+  galleryOverlay.classList.remove('invisible');
+};
+
+showGalleryOverlay(getPictures(picturesNumber), 0);
