@@ -30,7 +30,7 @@ var renderPicture = function (picture) {
 
   pictureElement.querySelector('img').src = picture.url;
   pictureElement.querySelector('.picture-likes').textContent = picture.likes;
-  pictureElement.querySelector('.picture-comments').textContent = picture.comments;
+  pictureElement.querySelector('.picture-comments').textContent = COMMENTS.length;
   return pictureElement;
 };
 
@@ -45,12 +45,15 @@ var createPicturesList = function (arr, renderFunction, container) {
 var pictures = document.querySelector('.pictures');
 createPicturesList(getPictures(picturesNumber), renderPicture, pictures);
 
+var uploadOverlay = document.querySelector('.upload-overlay');
+uploadOverlay.classList.add('invisible');
+
 var showGalleryOverlay = function (picturesArr, index) {
   var galleryOverlay = document.querySelector('.gallery-overlay');
 
   galleryOverlay.querySelector('.gallery-overlay-image').src = picturesArr[index].url;
   galleryOverlay.querySelector('.likes-count').textContent = picturesArr[index].likes;
-  galleryOverlay.querySelector('.comments-count').textContent = picturesArr[index].comments;
+  galleryOverlay.querySelector('.comments-count').textContent = COMMENTS.length;
   galleryOverlay.classList.remove('invisible');
 };
 
