@@ -59,8 +59,10 @@ var uploadCancel = uploadOverlay.querySelector('#upload-cancel');
 var uploadSubmit = uploadOverlay.querySelector('#upload-submit');
 
 var ENTER_KEY_CODE = 13;
-var isActivationEvent = function (evt) {
-  return evt.keyCode === ENTER_KEY_CODE;
+var isActivationEvent = function (evt, func) {
+  if (evt.keyCode === ENTER_KEY_CODE) {
+    func();
+  }
 };
 
 var onEscPress = function (evt) {
@@ -97,10 +99,8 @@ for (var i = 0; i < picturesGallery.length; i++) {
   });
 
   picturesGallery[i].addEventListener('keydown', function (evt) {
-    evt.preventDefault();
-    if (isActivationEvent(evt)) {
+    if (isActivationEvent(evt, openGalleryOverlay)) {
       setGalleryOverlay(evt);
-      openGalleryOverlay();
     }
   });
 }
@@ -110,9 +110,7 @@ galleryClose.addEventListener('click', function () {
 });
 
 galleryClose.addEventListener('keydown', function (evt) {
-  if (isActivationEvent(evt)) {
-    closeGalleryOverlay();
-  }
+  isActivationEvent(evt, closeGalleryOverlay);
 });
 
 var openUploadOverlay = function () {
@@ -136,9 +134,7 @@ uploadCancel.addEventListener('click', function () {
 });
 
 uploadCancel.addEventListener('keydown', function (evt) {
-  if (isActivationEvent(evt)) {
-    closeUploadOverlay();
-  }
+  isActivationEvent(evt, closeUploadOverlay);
 });
 
 uploadSubmit.addEventListener('click', function () {
@@ -146,7 +142,5 @@ uploadSubmit.addEventListener('click', function () {
 });
 
 uploadSubmit.addEventListener('keydown', function (evt) {
-  if (isActivationEvent(evt)) {
-    closeUploadOverlay();
-  }
+  isActivationEvent(evt, closeUploadOverlay);
 });
