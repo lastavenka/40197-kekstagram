@@ -23,7 +23,7 @@
   <form class="upload-form upload-image invisible" id="upload-select-image" method="post" enctype="multipart/form-data">
     <input type="file" id="upload-file" class="upload-input" name="filename" required>
     <label class="upload-file upload-control" for="upload-file"></label>
-    <button class="upload-submit upload-control" type="submit"></button>
+    <button tabindex="0" class="upload-submit upload-control" type="submit"></button>
   </form>
 
   <div class="upload-overlay">
@@ -126,8 +126,8 @@
 </div>
 
 <template id="picture-template" style="display: none">
-  <a href="" class="picture">
-    <img src="" width="182" height="182">
+  <a href="" class="picture" tabindex="0">
+    <img src="" width="182" height="182" tabindex="0">
     <span class="picture-stats">
       <span class="picture-stat picture-comments"></span>
       <span class="picture-stat picture-likes"></span>
