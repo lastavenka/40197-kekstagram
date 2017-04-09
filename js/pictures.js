@@ -68,12 +68,16 @@ var isActivationEvent = function (evt, func) {
 var onEscPress = function (evt) {
   if (evt.keyCode === 27) {
     closeGalleryOverlay();
-    var uploadComment = uploadOverlay.querySelector('.upload-form-description');
-    if (document.activeElement !== uploadComment) {
-      closeUploadOverlay();
-    }
+    closeUploadOverlay();
   }
 };
+
+var uploadComment = uploadOverlay.querySelector('.upload-form-description');
+uploadComment.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 27) {
+    evt.stopPropagation();
+  }
+});
 
 var openGalleryOverlay = function () {
   galleryOverlay.classList.remove('invisible');
@@ -137,10 +141,76 @@ uploadCancel.addEventListener('keydown', function (evt) {
   isActivationEvent(evt, closeUploadOverlay);
 });
 
-uploadSubmit.addEventListener('click', function () {
-  closeUploadOverlay();
+var setUploadDefault = function () {
+  imagePreview.classList.remove(currentFilter);
+  resizeValue.value = '100%';
+  imagePreview.removeAttribute('style');
+  uploadComment.value = '';
+// Не могу понять, как вернуть превью фильтров к первоначальному состоянию, то есть чтобы checked был первый фильтр (оригинал). Пыталась искать все инпуты фильтров, перебирать этот массив и с помощью setAttribute устанавливать атрибуту checked значение false, не работает.
+  var filterDefault = uploadOverlay.querySelector('#upload-filter-none');
+  filterDefault.setAttribute('checked', true);
+};
+
+uploadSubmit.addEventListener('click', function (evt) {
+  if (uploadComment.validity.valid) {
+    evt.preventDefault();
+    closeUploadOverlay();
+    setUploadDefault();
+  } else {
+    uploadComment.style.outlineColor = 'red';
+  }
 });
 
 uploadSubmit.addEventListener('keydown', function (evt) {
-  isActivationEvent(evt, closeUploadOverlay);
+  if (uploadComment.validity.valid) {
+    evt.preventDefault();
+    isActivationEvent(evt, closeUploadOverlay);
+    setUploadDefault();
+  } else {
+    uploadComment.style.outlineColor = 'red';
+  }
 });
+
+var filterControls = uploadOverlay.querySelector('.upload-filter-controls');
+var imagePreview = uploadOverlay.querySelector('.filter-image-preview');
+var resizeControls = uploadOverlay.querySelector('.upload-resize-controls');
+var resizeValue = uploadOverlay.querySelector('.upload-resize-controls-value');
+var currentFilter;
+
+var addFilter = function (filter) {
+  imagePreview.classList.remove(currentFilter);
+  if (filter !== 'none') {
+    currentFilter = filter;
+    imagePreview.classList.add(currentFilter);
+  }
+};
+
+filterControls.addEventListener('click', function (evt) {
+  if (evt.target.nodeName.toLowerCase() === 'input') {
+    var filterInput = evt.target;
+    addFilter('filter-' + filterInput.value);
+  }
+});
+
+var resizeImage = function (evt) {
+  var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
+
+  if (evt.target === resizeControlInc) {
+    if (resizeValue.value !== '100%') {
+      resizeValue.value = parseInt(resizeValue.value, 10) + 25 + '%';
+      imagePreview.style.transform = 'scale(' + parseInt(resizeValue.value, 10) / 100 + ')';
+    }
+  } else {
+    if (resizeValue.value !== '25%') {
+      resizeValue.value = parseInt(resizeValue.value, 10) - 25 + '%';
+      imagePreview.style.transform = 'scale(' + parseInt(resizeValue.value, 10) / 100 + ')';
+    }
+  }
+};
+
+resizeControls.addEventListener('click', function (evt) {
+  if (evt.target.nodeName.toLowerCase() === 'button') {
+    resizeImage(evt);
+  }
+});
+
