@@ -56,7 +56,7 @@ var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryClose = galleryOverlay.querySelector('.gallery-overlay-close');
 var uploadFile = uploadForm.elements.filename;
 var uploadCancel = uploadOverlay.querySelector('#upload-cancel');
-var uploadSubmit = uploadOverlay.querySelector('#upload-submit');
+var uploadComment = uploadOverlay.querySelector('.upload-form-description');
 
 var ENTER_KEY_CODE = 13;
 var isActivationEvent = function (evt, func) {
@@ -72,7 +72,6 @@ var onEscPress = function (evt) {
   }
 };
 
-var uploadComment = uploadOverlay.querySelector('.upload-form-description');
 uploadComment.addEventListener('keydown', function (evt) {
   if (evt.keyCode === 27) {
     evt.stopPropagation();
@@ -117,16 +116,22 @@ galleryClose.addEventListener('keydown', function (evt) {
   isActivationEvent(evt, closeGalleryOverlay);
 });
 
+var setInvalidBorder = function (evt) {
+  evt.target.style.outlineColor = 'red';
+};
+
 var openUploadOverlay = function () {
   uploadForm.classList.add('invisible');
   uploadOverlay.classList.remove('invisible');
   document.addEventListener('keydown', onEscPress);
+  uploadComment.addEventListener('invalid', setInvalidBorder);
 };
 
 var closeUploadOverlay = function () {
   uploadForm.classList.remove('invisible');
   uploadOverlay.classList.add('invisible');
   document.removeEventListener('keydown', onEscPress);
+  uploadComment.removeEventListener('invalid', setInvalidBorder);
 };
 
 uploadFile.addEventListener('change', function () {
@@ -146,29 +151,16 @@ var setUploadDefault = function () {
   resizeValue.value = '100%';
   imagePreview.removeAttribute('style');
   uploadComment.value = '';
-// Не могу понять, как вернуть превью фильтров к первоначальному состоянию, то есть чтобы checked был первый фильтр (оригинал). Пыталась искать все инпуты фильтров, перебирать этот массив и с помощью setAttribute устанавливать атрибуту checked значение false, не работает.
   var filterDefault = uploadOverlay.querySelector('#upload-filter-none');
-  filterDefault.setAttribute('checked', true);
+  filterDefault.checked = true;
 };
 
-uploadSubmit.addEventListener('click', function (evt) {
-  if (uploadComment.validity.valid) {
-    evt.preventDefault();
-    closeUploadOverlay();
-    setUploadDefault();
-  } else {
-    uploadComment.style.outlineColor = 'red';
-  }
-});
-
-uploadSubmit.addEventListener('keydown', function (evt) {
-  if (uploadComment.validity.valid) {
-    evt.preventDefault();
-    isActivationEvent(evt, closeUploadOverlay);
-    setUploadDefault();
-  } else {
-    uploadComment.style.outlineColor = 'red';
-  }
+var uploadOverlayForm = document.querySelector('#upload-filter');
+uploadOverlayForm.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+  closeUploadOverlay();
+  setUploadDefault();
+  uploadComment.style.outlineColor = 'red';
 });
 
 var filterControls = uploadOverlay.querySelector('.upload-filter-controls');
@@ -198,14 +190,13 @@ var resizeImage = function (evt) {
   if (evt.target === resizeControlInc) {
     if (resizeValue.value !== '100%') {
       resizeValue.value = parseInt(resizeValue.value, 10) + 25 + '%';
-      imagePreview.style.transform = 'scale(' + parseInt(resizeValue.value, 10) / 100 + ')';
     }
   } else {
     if (resizeValue.value !== '25%') {
       resizeValue.value = parseInt(resizeValue.value, 10) - 25 + '%';
-      imagePreview.style.transform = 'scale(' + parseInt(resizeValue.value, 10) / 100 + ')';
     }
   }
+  imagePreview.style.transform = 'scale(' + parseInt(resizeValue.value, 10) / 100 + ')';
 };
 
 resizeControls.addEventListener('click', function (evt) {
