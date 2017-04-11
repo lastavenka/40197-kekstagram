@@ -56,7 +56,7 @@ var galleryOverlay = document.querySelector('.gallery-overlay');
 var galleryClose = galleryOverlay.querySelector('.gallery-overlay-close');
 var uploadFile = uploadForm.elements.filename;
 var uploadCancel = uploadOverlay.querySelector('#upload-cancel');
-var uploadSubmit = uploadOverlay.querySelector('#upload-submit');
+var uploadComment = uploadOverlay.querySelector('.upload-form-description');
 
 var ENTER_KEY_CODE = 13;
 var isActivationEvent = function (evt, func) {
@@ -68,12 +68,15 @@ var isActivationEvent = function (evt, func) {
 var onEscPress = function (evt) {
   if (evt.keyCode === 27) {
     closeGalleryOverlay();
-    var uploadComment = uploadOverlay.querySelector('.upload-form-description');
-    if (document.activeElement !== uploadComment) {
-      closeUploadOverlay();
-    }
+    closeUploadOverlay();
   }
 };
+
+uploadComment.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 27) {
+    evt.stopPropagation();
+  }
+});
 
 var openGalleryOverlay = function () {
   galleryOverlay.classList.remove('invisible');
@@ -105,42 +108,91 @@ for (var i = 0; i < picturesGallery.length; i++) {
   });
 }
 
-galleryClose.addEventListener('click', function () {
-  closeGalleryOverlay();
-});
+galleryClose.addEventListener('click', closeGalleryOverlay);
 
 galleryClose.addEventListener('keydown', function (evt) {
   isActivationEvent(evt, closeGalleryOverlay);
 });
 
+var setInvalidBorder = function (evt) {
+  evt.target.style.outlineColor = 'red';
+};
+
 var openUploadOverlay = function () {
   uploadForm.classList.add('invisible');
   uploadOverlay.classList.remove('invisible');
   document.addEventListener('keydown', onEscPress);
+  uploadComment.addEventListener('invalid', setInvalidBorder);
 };
 
 var closeUploadOverlay = function () {
   uploadForm.classList.remove('invisible');
   uploadOverlay.classList.add('invisible');
   document.removeEventListener('keydown', onEscPress);
+  uploadComment.removeEventListener('invalid', setInvalidBorder);
 };
 
-uploadFile.addEventListener('change', function () {
-  openUploadOverlay();
-});
-
-uploadCancel.addEventListener('click', function () {
-  closeUploadOverlay();
-});
-
+uploadFile.addEventListener('change', openUploadOverlay);
+uploadCancel.addEventListener('click', closeUploadOverlay);
 uploadCancel.addEventListener('keydown', function (evt) {
   isActivationEvent(evt, closeUploadOverlay);
 });
 
-uploadSubmit.addEventListener('click', function () {
+var setUploadDefault = function () {
+  imagePreview.classList.remove(currentFilter);
+  resizeValue.value = '100%';
+  imagePreview.removeAttribute('style');
+  uploadComment.value = '';
+  var filterDefault = uploadOverlay.querySelector('#upload-filter-none');
+  filterDefault.checked = true;
+};
+
+var uploadOverlayForm = document.querySelector('#upload-filter');
+uploadOverlayForm.addEventListener('submit', function (evt) {
+  evt.preventDefault();
   closeUploadOverlay();
+  setUploadDefault();
 });
 
-uploadSubmit.addEventListener('keydown', function (evt) {
-  isActivationEvent(evt, closeUploadOverlay);
+var filterControls = uploadOverlay.querySelector('.upload-filter-controls');
+var imagePreview = uploadOverlay.querySelector('.filter-image-preview');
+var resizeControls = uploadOverlay.querySelector('.upload-resize-controls');
+var resizeValue = uploadOverlay.querySelector('.upload-resize-controls-value');
+var currentFilter;
+
+var addFilter = function (filter) {
+  imagePreview.classList.remove(currentFilter);
+  if (filter !== 'none') {
+    currentFilter = filter;
+    imagePreview.classList.add(currentFilter);
+  }
+};
+
+filterControls.addEventListener('click', function (evt) {
+  if (evt.target.nodeName.toLowerCase() === 'input') {
+    var filterInput = evt.target;
+    addFilter('filter-' + filterInput.value);
+  }
 });
+
+var resizeImage = function (evt) {
+  var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
+
+  if (evt.target === resizeControlInc) {
+    if (resizeValue.value !== '100%') {
+      resizeValue.value = parseInt(resizeValue.value, 10) + 25 + '%';
+    }
+  } else {
+    if (resizeValue.value !== '25%') {
+      resizeValue.value = parseInt(resizeValue.value, 10) - 25 + '%';
+    }
+  }
+  imagePreview.style.transform = 'scale(' + parseInt(resizeValue.value, 10) / 100 + ')';
+};
+
+resizeControls.addEventListener('click', function (evt) {
+  if (evt.target.nodeName.toLowerCase() === 'button') {
+    resizeImage(evt);
+  }
+});
+
