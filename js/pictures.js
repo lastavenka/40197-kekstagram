@@ -108,9 +108,7 @@ for (var i = 0; i < picturesGallery.length; i++) {
   });
 }
 
-galleryClose.addEventListener('click', function () {
-  closeGalleryOverlay();
-});
+galleryClose.addEventListener('click', closeGalleryOverlay);
 
 galleryClose.addEventListener('keydown', function (evt) {
   isActivationEvent(evt, closeGalleryOverlay);
@@ -134,14 +132,8 @@ var closeUploadOverlay = function () {
   uploadComment.removeEventListener('invalid', setInvalidBorder);
 };
 
-uploadFile.addEventListener('change', function () {
-  openUploadOverlay();
-});
-
-uploadCancel.addEventListener('click', function () {
-  closeUploadOverlay();
-});
-
+uploadFile.addEventListener('change', openUploadOverlay);
+uploadCancel.addEventListener('click', closeUploadOverlay);
 uploadCancel.addEventListener('keydown', function (evt) {
   isActivationEvent(evt, closeUploadOverlay);
 });
@@ -160,7 +152,6 @@ uploadOverlayForm.addEventListener('submit', function (evt) {
   evt.preventDefault();
   closeUploadOverlay();
   setUploadDefault();
-  uploadComment.style.outlineColor = 'red';
 });
 
 var filterControls = uploadOverlay.querySelector('.upload-filter-controls');
