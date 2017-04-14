@@ -39,10 +39,6 @@ window.utils = (function () {
 
     setInvalidBorder: function (evt) {
       evt.target.style.outlineColor = 'red';
-    },
-
-    stopBubbling: function (evt) {
-      evt.stopPropagation();
     }
   };
 })();
