@@ -1,6 +1,6 @@
 'use strict';
 
-window.uploadOverlay = (function () {
+(function () {
   var uploadOverlay = document.querySelector('.upload-overlay');
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFile = uploadForm.elements.filename;
