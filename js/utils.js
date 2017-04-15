@@ -39,6 +39,12 @@ window.utils = (function () {
 
     setInvalidBorder: function (evt) {
       evt.target.style.outlineColor = 'red';
+    },
+
+    stopBubbling: function (evt) {
+      if (isKeyboardEvent(evt) && evt.keyCode === ESCAPE_KEY_CODE) {
+        evt.stopPropagation();
+      }
     }
   };
 })();

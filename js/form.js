@@ -28,8 +28,11 @@
       window.utils.onEscPress(evt, closeUploadOverlay);
     });
     uploadComment.removeEventListener('invalid', window.utils.setInvalidBorder);
+    uploadComment.removeEventListener('keydown', window.utils.stopBubbling);
     setUploadDefault();
   };
+    
+  uploadComment.addEventListener('keydown', window.utils.stopBubbling);
 
   uploadFile.addEventListener('change', openUploadOverlay);
   uploadCancel.addEventListener('click', closeUploadOverlay);
@@ -53,9 +56,6 @@
     setUploadDefault();
   });
 
-  uploadComment.addEventListener('keydown', function (evt) {
-    window.utils.onEscPress(evt, evt.stopPropagation());
-  });
 
   var addFilter = function (filter) {
     imagePreview.classList.remove(currentFilter);
@@ -65,8 +65,8 @@
       window.utils.showElement(filterLevel);
       setDefaultFilterLevel();
     } else {
-      setDefaultFilterLevel();
       window.utils.hideElement(filterLevel);
+      imagePreview.style.filter = '';
     }
   };
 
@@ -126,9 +126,7 @@
 
         if ((handle.offsetLeft - shift) < leftEdge) {
           handle.style.left = leftEdge + 'px';
-        }
-
-        if ((handle.offsetLeft - shift) > rightEdge) {
+        } else if ((handle.offsetLeft - shift) > rightEdge) {
           handle.style.left = rightEdge + 'px';
         }
 
