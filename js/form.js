@@ -31,7 +31,7 @@
     uploadComment.removeEventListener('keydown', window.utils.stopBubbling);
     setUploadDefault();
   };
-    
+
   uploadComment.addEventListener('keydown', window.utils.stopBubbling);
 
   uploadFile.addEventListener('change', openUploadOverlay);
