@@ -8,7 +8,6 @@
   var uploadOverlayForm = document.querySelector('#upload-filter');
   var uploadComment = uploadOverlay.querySelector('.upload-form-description');
   var imagePreview = uploadOverlay.querySelector('.filter-image-preview');
-  var resizeControls = uploadOverlay.querySelector('.upload-resize-controls');
   var filterControls = uploadOverlay.querySelector('.upload-filter-controls');
   var currentFilter;
 
@@ -57,6 +56,20 @@
   });
 
 
+  var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
+  var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
+  var resizeControl = uploadOverlay.querySelector('.upload-resize-controls-value');
+  var resizeStep = 25;
+  var resizeMin = 25;
+  var resizeMax = 100;
+
+  var resizeImage = function (value) {
+    imagePreview.style.transform = 'scale(' + value / 100 + ')';
+    resizeControl.value = value + '%';
+  };
+
+  window.initializeScale(resizeControlInc, resizeControlDec, resizeControl, resizeMin, resizeMax, resizeStep, resizeImage);
+
   var addFilter = function (filter) {
     imagePreview.classList.remove(currentFilter);
     if (filter !== 'filter-none') {
@@ -70,86 +83,54 @@
     }
   };
 
-  filterControls.addEventListener('click', function (evt) {
-    if (evt.target.nodeName.toLowerCase() === 'input') {
-      var filterInput = evt.target;
-      addFilter('filter-' + filterInput.value);
-    }
-  });
-
-  var resizeImage = function (evt) {
-    var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
-    var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
-    var resizeValue = uploadOverlay.querySelector('.upload-resize-controls-value');
-
-    switch (evt.target) {
-      case resizeControlInc:
-        if (resizeValue.value !== '100%') {
-          resizeValue.value = parseInt(resizeValue.value, 10) + 25 + '%';
-        }
-        break;
-      case resizeControlDec:
-        if (resizeValue.value !== '25%') {
-          resizeValue.value = parseInt(resizeValue.value, 10) - 25 + '%';
-        }
-        break;
-    }
-
-    imagePreview.style.transform = 'scale(' + parseInt(resizeValue.value, 10) / 100 + ')';
-  };
-
-  resizeControls.addEventListener('click', function (evt) {
-    if (evt.target.nodeName.toLowerCase() === 'button') {
-      resizeImage(evt);
-    }
-  });
+  window.initializeFilters(filterControls, addFilter);
 
   var filterLevelPin = filterControls.querySelector('.upload-filter-level-pin');
   var filterLevelLine = filterControls.querySelector('.upload-filter-level-line');
   var filterLevelValue = filterControls.querySelector('.upload-filter-level-val');
   var filterLevel = filterControls.querySelector('.upload-filter-level');
   window.utils.hideElement(filterLevel);
-  filterLevelPin.style.zIndex = '10';
 
-  var changeFilterLevel = function (handle) {
-    handle.addEventListener('mousedown', function (evt) {
-      evt.preventDefault();
+  var changeFilterLevel = function (evt) {
+    evt.preventDefault();
 
-      var startX = evt.clientX;
-      var onMouseMove = function (moveEvt) {
-        moveEvt.preventDefault();
-        var shift = startX - moveEvt.clientX;
-        startX = moveEvt.clientX;
+    var startX = evt.clientX;
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      var shift = startX - moveEvt.clientX;
+      startX = moveEvt.clientX;
 
-        var leftEdge = filterLevelLine.offsetLeft - filterLevelPin.offsetWidth;
-        var rightEdge = filterLevelLine.offsetLeft + filterLevelLine.offsetWidth - filterLevelPin.offsetWidth;
+      var leftEdge = filterLevelLine.offsetLeft - evt.target.offsetWidth;
+      var rightEdge = filterLevelLine.offsetLeft + filterLevelLine.offsetWidth - evt.target.offsetWidth;
 
-        if ((handle.offsetLeft - shift) < leftEdge) {
-          handle.style.left = leftEdge + 'px';
-        } else if ((handle.offsetLeft - shift) > rightEdge) {
-          handle.style.left = rightEdge + 'px';
-        }
+      if ((evt.target.offsetLeft - shift) < leftEdge) {
+        evt.target.style.left = leftEdge + 'px';
+      }
 
-        var handleX = handle.offsetLeft - shift;
-        handle.style.left = handleX + 'px';
-        var level = handleX * 100 / filterLevelLine.offsetWidth;
-        filterLevelValue.style.width = level + '%';
-        setFilterLevel(level);
-      };
+      if ((evt.target.offsetLeft - shift) > rightEdge) {
+        evt.target.style.left = rightEdge + 'px';
+      }
 
-      var onMouseUp = function (upEvt) {
-        upEvt.preventDefault();
+      var handleX = evt.target.offsetLeft - shift;
+      evt.target.style.left = handleX + 'px';
+      var level = handleX * 100 / filterLevelLine.offsetWidth;
+      filterLevelValue.style.width = level + '%';
+      setFilterLevel(level);
+    };
 
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-      };
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
 
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    });
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   };
 
-  changeFilterLevel(filterLevelPin);
+  filterLevelPin.addEventListener('mousedown', changeFilterLevel);
+
 
   var setFilterLevel = function (level) {
     switch (currentFilter) {
