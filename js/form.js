@@ -55,7 +55,6 @@
     setUploadDefault();
   });
 
-
   var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
   var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
   var resizeControl = uploadOverlay.querySelector('.upload-resize-controls-value');
