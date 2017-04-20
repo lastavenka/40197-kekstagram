@@ -46,5 +46,5 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.load.loadPictures(URL, createPicturesList, errorHandler);
+  window.load(URL, createPicturesList, errorHandler);
 })();

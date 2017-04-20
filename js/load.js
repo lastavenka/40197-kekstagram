@@ -1,7 +1,7 @@
 'use strict';
 
 window.load = (function () {
-  var loadPictures = function (url, onLoad, onError) {
+  return function (url, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.timeout = 10000;
     xhr.responseType = 'json';
@@ -22,9 +22,5 @@ window.load = (function () {
 
     xhr.open('GET', url);
     xhr.send();
-  };
-
-  return {
-    loadPictures: loadPictures
   };
 })();
