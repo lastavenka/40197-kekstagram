@@ -3,8 +3,6 @@
 window.utils = (function () {
   var ENTER_KEY_CODE = 13;
   var ESCAPE_KEY_CODE = 27;
-  var DEBOUNCE_INTERVAL = 500;
-  var lastTimeout;
 
   var isKeyboardEvent = function (evt) {
     return typeof evt.keyCode !== 'undefined';
@@ -53,11 +51,16 @@ window.utils = (function () {
       }
     },
 
-    debounce: function (fun) {
-      if (lastTimeout) {
-        window.clearTimeout(lastTimeout);
-      }
-      lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+    debounce: function (func, wait) {
+      var timeout;
+      return function () {
+        var later = function () {
+          timeout = null;
+          func.apply();
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
     }
   };
 })();

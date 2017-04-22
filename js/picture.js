@@ -58,40 +58,36 @@
 
   window.load(URL, onLoad, onError);
 
-  var showPopularPictures = function () {
-    renderPictures(pictures);
-  };
-
-  var showNewPictures = function () {
+  var filterPictures = function (evt) {
+    var picturesList = [];
     var sortRandom = function () {
       return Math.random() - 0.5;
     };
-    var newPictures = pictures.slice().sort(sortRandom).slice(0, 10);
-
-    renderPictures(newPictures);
-  };
-
-  var showDiscussedPictures = function () {
     var sortCompare = function (a, b) {
       var shift = b.comments.length - a.comments.length;
       return shift;
     };
-    var discussedPictures = pictures.slice().sort(sortCompare);
 
-    renderPictures(discussedPictures);
+    switch (evt.target.value) {
+      case 'popular':
+        picturesList = pictures;
+        break;
+      case 'new':
+        picturesList = pictures.slice().sort(sortRandom).slice(0, 10);
+        break;
+      case 'discussed':
+        picturesList = pictures.slice().sort(sortCompare);
+        break;
+    }
+
+    window.utils.debounce(function () {
+      renderPictures(picturesList);
+    }, 500);
   };
 
   document.querySelector('.filters').addEventListener('click', function (evt) {
-    switch (evt.target.value) {
-      case 'popular':
-        window.utils.debounce(showPopularPictures);
-        break;
-      case 'new':
-        window.utils.debounce(showNewPictures);
-        break;
-      case 'discussed':
-        window.utils.debounce(showDiscussedPictures);
-        break;
+    if (evt.target.nodeName === 'INPUT') {
+      filterPictures(evt);
     }
   });
 })();
