@@ -3,6 +3,7 @@
 (function () {
   var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/kekstagram/data';
   var pictures = [];
+  var DEBOUNCE_INTERVAL = 500;
 
   var getPictureData = function (picture) {
     var pictureElement = document.querySelector('#picture-template').content.cloneNode(true);
@@ -60,6 +61,7 @@
 
   var filterPictures = function (evt) {
     var picturesList = [];
+    var newPicturesCount = 10;
     var sortRandom = function () {
       return Math.random() - 0.5;
     };
@@ -73,7 +75,7 @@
         picturesList = pictures;
         break;
       case 'new':
-        picturesList = pictures.slice().sort(sortRandom).slice(0, 10);
+        picturesList = pictures.slice().sort(sortRandom).slice(0, newPicturesCount);
         break;
       case 'discussed':
         picturesList = pictures.slice().sort(sortCompare);
@@ -82,7 +84,7 @@
 
     window.utils.debounce(function () {
       renderPictures(picturesList);
-    }, 500);
+    }, DEBOUNCE_INTERVAL);
   };
 
   document.querySelector('.filters').addEventListener('click', function (evt) {

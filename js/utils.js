@@ -3,6 +3,8 @@
 window.utils = (function () {
   var ENTER_KEY_CODE = 13;
   var ESCAPE_KEY_CODE = 27;
+  var timeout;
+  var lastTimeout;
 
   var isKeyboardEvent = function (evt) {
     return typeof evt.keyCode !== 'undefined';
@@ -51,16 +53,24 @@ window.utils = (function () {
       }
     },
 
-    debounce: function (func, wait) {
-      var timeout;
-      return function () {
-        var later = function () {
-          timeout = null;
-          func.apply();
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-      };
+    debounce: function (func, wait, immediate) {
+      if (!timeout) {
+        func();
+        immediate = true;
+      }
+
+      timeout = true;
+
+      if (lastTimeout) {
+        clearTimeout(lastTimeout);
+      }
+
+      lastTimeout = setTimeout(function () {
+        if (!immediate) {
+          func();
+        }
+        timeout = false;
+      }, wait);
     }
   };
 })();
