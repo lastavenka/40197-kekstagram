@@ -3,6 +3,8 @@
 window.utils = (function () {
   var ENTER_KEY_CODE = 13;
   var ESCAPE_KEY_CODE = 27;
+  var timeout;
+  var lastTimeout;
 
   var isKeyboardEvent = function (evt) {
     return typeof evt.keyCode !== 'undefined';
@@ -24,7 +26,11 @@ window.utils = (function () {
     },
 
     showElement: function (element) {
-      element.classList.remove('invisible');
+      if (element.classList.contains('invisible')) {
+        element.classList.remove('invisible');
+      } else {
+        element.classList.remove('hidden');
+      }
     },
 
     hideElement: function (element) {
@@ -45,6 +51,26 @@ window.utils = (function () {
       if (isKeyboardEvent(evt) && evt.keyCode === ESCAPE_KEY_CODE) {
         evt.stopPropagation();
       }
+    },
+
+    debounce: function (func, wait, immediate) {
+      if (!timeout) {
+        func();
+        immediate = true;
+      }
+
+      timeout = true;
+
+      if (lastTimeout) {
+        clearTimeout(lastTimeout);
+      }
+
+      lastTimeout = setTimeout(function () {
+        if (!immediate) {
+          func();
+        }
+        timeout = false;
+      }, wait);
     }
   };
 })();
