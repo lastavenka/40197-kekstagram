@@ -1,10 +1,10 @@
 'use strict';
 
-window.initializeFilters = (function (filterbox, callback) {
+window.initializeFilters = (function (filterbox, cb) {
   filterbox.addEventListener('click', function (evt) {
     if (evt.target.nodeName.toLowerCase() === 'input') {
       var filterInput = evt.target;
-      callback('filter-' + filterInput.value);
+      cb('filter-' + filterInput.value);
     }
   });
 });

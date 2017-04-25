@@ -11,20 +11,20 @@
   var filterControls = uploadOverlay.querySelector('.upload-filter-controls');
   var currentFilter;
 
-  var openUploadOverlay = function () {
-    uploadForm.classList.add('invisible');
-    uploadOverlay.classList.remove('invisible');
+  var onUploadOverlayOpen = function () {
+    window.utils.hideElement(uploadForm);
+    window.utils.showElement(uploadOverlay);
     document.addEventListener('keydown', function (evt) {
-      window.utils.onEscPress(evt, closeUploadOverlay);
+      window.utils.onEscPress(evt, onUploadOverlayClose);
     });
-    uploadComment.addEventListener('invalid', window.utils.setInvalidBorder);
+    uploadComment.addEventListener('invalid', window.utils.onError);
   };
 
-  var closeUploadOverlay = function () {
-    uploadForm.classList.remove('invisible');
-    uploadOverlay.classList.add('invisible');
+  var onUploadOverlayClose = function () {
+    window.utils.hideElement(uploadOverlay);
+    window.utils.showElement(uploadForm);
     document.removeEventListener('keydown', function (evt) {
-      window.utils.onEscPress(evt, closeUploadOverlay);
+      window.utils.onEscPress(evt, onUploadOverlayClose);
     });
     uploadComment.removeEventListener('invalid', window.utils.setInvalidBorder);
     uploadComment.removeEventListener('keydown', window.utils.stopBubbling);
@@ -32,10 +32,10 @@
   };
 
   uploadComment.addEventListener('keydown', window.utils.stopBubbling);
-  uploadFile.addEventListener('change', openUploadOverlay);
-  uploadCancel.addEventListener('click', closeUploadOverlay);
+  uploadFile.addEventListener('change', onUploadOverlayOpen);
+  uploadCancel.addEventListener('click', onUploadOverlayClose);
   uploadCancel.addEventListener('keydown', function (evt) {
-    window.utils.onEnterPress(evt, closeUploadOverlay);
+    window.utils.onEnterPress(evt, onUploadOverlayClose);
   });
 
   var setUploadDefault = function () {
@@ -50,7 +50,7 @@
 
   uploadOverlayForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    closeUploadOverlay();
+    onUploadOverlayClose();
     setUploadDefault();
   });
 

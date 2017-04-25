@@ -43,7 +43,7 @@ window.utils = (function () {
       return rand;
     },
 
-    setInvalidBorder: function (evt) {
+    onError: function (evt) {
       evt.target.style.outlineColor = 'red';
     },
 
