@@ -29,11 +29,11 @@
     picturesGallery.forEach(function (item) {
       item.addEventListener('click', function (evt) {
         evt.preventDefault();
-        window.preview.openGalleryOverlay(evt);
+        window.preview.onGalleryOverlayOpen(evt);
       });
 
       item.addEventListener('keydown', function (evt) {
-        window.utils.onEnterPress(evt, window.preview.openGalleryOverlay);
+        window.utils.onEnterPress(evt, window.preview.onGalleryOverlayOpen);
       });
     });
   };

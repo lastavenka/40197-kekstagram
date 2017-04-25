@@ -18,6 +18,7 @@
       window.utils.onEscPress(evt, onUploadOverlayClose);
     });
     uploadComment.addEventListener('invalid', window.utils.onError);
+    uploadComment.addEventListener('keydown', window.utils.onTextareaFocus);
   };
 
   var onUploadOverlayClose = function () {
@@ -26,12 +27,11 @@
     document.removeEventListener('keydown', function (evt) {
       window.utils.onEscPress(evt, onUploadOverlayClose);
     });
-    uploadComment.removeEventListener('invalid', window.utils.setInvalidBorder);
-    uploadComment.removeEventListener('keydown', window.utils.stopBubbling);
+    uploadComment.removeEventListener('invalid', window.utils.onError);
+    uploadComment.removeEventListener('keydown', window.utils.onTextareaFocus);
     setUploadDefault();
   };
 
-  uploadComment.addEventListener('keydown', window.utils.stopBubbling);
   uploadFile.addEventListener('change', onUploadOverlayOpen);
   uploadCancel.addEventListener('click', onUploadOverlayClose);
   uploadCancel.addEventListener('keydown', function (evt) {
@@ -61,14 +61,14 @@
   var resizeMin = 25;
   var resizeMax = 100;
 
-  var resizeImage = function (value) {
+  var onImageResize = function (value) {
     imagePreview.style.transform = 'scale(' + value / 100 + ')';
     resizeControl.value = value + '%';
   };
 
-  window.initializeScale(resizeControlInc, resizeControlDec, resizeControl, resizeMin, resizeMax, resizeStep, resizeImage);
+  window.initializeScale(resizeControlInc, resizeControlDec, resizeControl, resizeMin, resizeMax, resizeStep, onImageResize);
 
-  var addFilter = function (filter) {
+  var onFilterClick = function (filter) {
     imagePreview.classList.remove(currentFilter);
     if (filter !== 'filter-none') {
       currentFilter = filter;
@@ -81,7 +81,7 @@
     }
   };
 
-  window.initializeFilters(filterControls, addFilter);
+  window.initializeFilters(filterControls, onFilterClick);
 
   var filterLevelPin = filterControls.querySelector('.upload-filter-level-pin');
   var filterLevelLine = filterControls.querySelector('.upload-filter-level-line');
@@ -89,7 +89,7 @@
   var filterLevel = filterControls.querySelector('.upload-filter-level');
   window.utils.hideElement(filterLevel);
 
-  var changeFilterLevel = function (evt) {
+  var onFilterLevelChange = function (evt) {
     evt.preventDefault();
 
     var startX = evt.clientX;
@@ -127,7 +127,7 @@
     document.addEventListener('mouseup', onMouseUp);
   };
 
-  filterLevelPin.addEventListener('mousedown', changeFilterLevel);
+  filterLevelPin.addEventListener('mousedown', onFilterLevelChange);
 
 
   var setFilterLevel = function (level) {
