@@ -43,11 +43,11 @@ window.utils = (function () {
       return rand;
     },
 
-    setInvalidBorder: function (evt) {
+    onError: function (evt) {
       evt.target.style.outlineColor = 'red';
     },
 
-    stopBubbling: function (evt) {
+    onTextareaFocus: function (evt) {
       if (isKeyboardEvent(evt) && evt.keyCode === ESCAPE_KEY_CODE) {
         evt.stopPropagation();
       }

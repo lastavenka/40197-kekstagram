@@ -11,31 +11,31 @@
   var filterControls = uploadOverlay.querySelector('.upload-filter-controls');
   var currentFilter;
 
-  var openUploadOverlay = function () {
-    uploadForm.classList.add('invisible');
-    uploadOverlay.classList.remove('invisible');
+  var onUploadOverlayOpen = function () {
+    window.utils.hideElement(uploadForm);
+    window.utils.showElement(uploadOverlay);
     document.addEventListener('keydown', function (evt) {
-      window.utils.onEscPress(evt, closeUploadOverlay);
+      window.utils.onEscPress(evt, onUploadOverlayClose);
     });
-    uploadComment.addEventListener('invalid', window.utils.setInvalidBorder);
+    uploadComment.addEventListener('invalid', window.utils.onError);
+    uploadComment.addEventListener('keydown', window.utils.onTextareaFocus);
   };
 
-  var closeUploadOverlay = function () {
-    uploadForm.classList.remove('invisible');
-    uploadOverlay.classList.add('invisible');
+  var onUploadOverlayClose = function () {
+    window.utils.hideElement(uploadOverlay);
+    window.utils.showElement(uploadForm);
     document.removeEventListener('keydown', function (evt) {
-      window.utils.onEscPress(evt, closeUploadOverlay);
+      window.utils.onEscPress(evt, onUploadOverlayClose);
     });
-    uploadComment.removeEventListener('invalid', window.utils.setInvalidBorder);
-    uploadComment.removeEventListener('keydown', window.utils.stopBubbling);
+    uploadComment.removeEventListener('invalid', window.utils.onError);
+    uploadComment.removeEventListener('keydown', window.utils.onTextareaFocus);
     setUploadDefault();
   };
 
-  uploadComment.addEventListener('keydown', window.utils.stopBubbling);
-  uploadFile.addEventListener('change', openUploadOverlay);
-  uploadCancel.addEventListener('click', closeUploadOverlay);
+  uploadFile.addEventListener('change', onUploadOverlayOpen);
+  uploadCancel.addEventListener('click', onUploadOverlayClose);
   uploadCancel.addEventListener('keydown', function (evt) {
-    window.utils.onEnterPress(evt, closeUploadOverlay);
+    window.utils.onEnterPress(evt, onUploadOverlayClose);
   });
 
   var setUploadDefault = function () {
@@ -50,7 +50,7 @@
 
   uploadOverlayForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    closeUploadOverlay();
+    onUploadOverlayClose();
     setUploadDefault();
   });
 
@@ -61,14 +61,14 @@
   var resizeMin = 25;
   var resizeMax = 100;
 
-  var resizeImage = function (value) {
+  var onImageResize = function (value) {
     imagePreview.style.transform = 'scale(' + value / 100 + ')';
     resizeControl.value = value + '%';
   };
 
-  window.initializeScale(resizeControlInc, resizeControlDec, resizeControl, resizeMin, resizeMax, resizeStep, resizeImage);
+  window.initializeScale(resizeControlInc, resizeControlDec, resizeControl, resizeMin, resizeMax, resizeStep, onImageResize);
 
-  var addFilter = function (filter) {
+  var onFilterClick = function (filter) {
     imagePreview.classList.remove(currentFilter);
     if (filter !== 'filter-none') {
       currentFilter = filter;
@@ -81,7 +81,7 @@
     }
   };
 
-  window.initializeFilters(filterControls, addFilter);
+  window.initializeFilters(filterControls, onFilterClick);
 
   var filterLevelPin = filterControls.querySelector('.upload-filter-level-pin');
   var filterLevelLine = filterControls.querySelector('.upload-filter-level-line');
@@ -89,7 +89,7 @@
   var filterLevel = filterControls.querySelector('.upload-filter-level');
   window.utils.hideElement(filterLevel);
 
-  var changeFilterLevel = function (evt) {
+  var onFilterLevelChange = function (evt) {
     evt.preventDefault();
 
     var startX = evt.clientX;
@@ -127,7 +127,7 @@
     document.addEventListener('mouseup', onMouseUp);
   };
 
-  filterLevelPin.addEventListener('mousedown', changeFilterLevel);
+  filterLevelPin.addEventListener('mousedown', onFilterLevelChange);
 
 
   var setFilterLevel = function (level) {

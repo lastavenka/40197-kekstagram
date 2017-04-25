@@ -1,12 +1,12 @@
 'use strict';
 
-window.initializeScale = function (controlInc, controlDec, scaleValue, min, max, step, callback) {
+window.initializeScale = function (controlInc, controlDec, scaleValue, min, max, step, cb) {
   controlInc.addEventListener('click', function () {
     var currentValue = parseInt(scaleValue.value, 10);
     if (currentValue !== max) {
       currentValue += step;
     }
-    callback(currentValue);
+    cb(currentValue);
   });
 
   controlDec.addEventListener('click', function () {
@@ -14,6 +14,6 @@ window.initializeScale = function (controlInc, controlDec, scaleValue, min, max,
     if (currentValue !== min) {
       currentValue -= step;
     }
-    callback(currentValue);
+    cb(currentValue);
   });
 };

@@ -29,11 +29,11 @@
     picturesGallery.forEach(function (item) {
       item.addEventListener('click', function (evt) {
         evt.preventDefault();
-        window.preview.openGalleryOverlay(evt);
+        window.preview.onGalleryOverlayOpen(evt);
       });
 
       item.addEventListener('keydown', function (evt) {
-        window.utils.onEnterPress(evt, window.preview.openGalleryOverlay);
+        window.utils.onEnterPress(evt, window.preview.onGalleryOverlayOpen);
       });
     });
   };
@@ -59,7 +59,7 @@
 
   window.load(URL, onLoad, onError);
 
-  var filterPictures = function (evt) {
+  var onFilterClick = function (evt) {
     var picturesList = [];
     var newPicturesCount = 10;
     var sortRandom = function () {
@@ -89,7 +89,7 @@
 
   document.querySelector('.filters').addEventListener('click', function (evt) {
     if (evt.target.nodeName === 'INPUT') {
-      filterPictures(evt);
+      onFilterClick(evt);
     }
   });
 })();
