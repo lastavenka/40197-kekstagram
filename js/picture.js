@@ -29,7 +29,7 @@
     picturesGallery.forEach(function (item) {
       item.addEventListener('click', function (evt) {
         evt.preventDefault();
-        window.preview.onGalleryOverlayOpen(evt);
+        window.preview.onPreviewOpen(evt);
       });
 
       item.addEventListener('keydown', function (evt) {
@@ -65,8 +65,12 @@
     var sortRandom = function () {
       return Math.random() - 0.5;
     };
-    var sortCompare = function (a, b) {
-      var shift = b.comments.length - a.comments.length;
+    var sortCompare = function (picture1, picture2) {
+      if (picture2.comments.length !== picture1.comments.length) {
+        var shift = picture2.comments.length - picture1.comments.length;
+      } else {
+        shift = picture2.likes - picture1.likes;
+      }
       return shift;
     };
 

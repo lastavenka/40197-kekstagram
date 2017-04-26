@@ -54,8 +54,8 @@
     setUploadDefault();
   });
 
-  var resizeControlInc = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
-  var resizeControlDec = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
+  var resizeControlIncrease = uploadOverlay.querySelector('.upload-resize-controls-button-inc');
+  var resizeControlDecrease = uploadOverlay.querySelector('.upload-resize-controls-button-dec');
   var resizeControl = uploadOverlay.querySelector('.upload-resize-controls-value');
   var resizeStep = 25;
   var resizeMin = 25;
@@ -66,7 +66,7 @@
     resizeControl.value = value + '%';
   };
 
-  window.initializeScale(resizeControlInc, resizeControlDec, resizeControl, resizeMin, resizeMax, resizeStep, onImageResize);
+  window.initializeScale(resizeControlIncrease, resizeControlDecrease, resizeControl, resizeMin, resizeMax, resizeStep, onImageResize);
 
   var onFilterClick = function (filter) {
     imagePreview.classList.remove(currentFilter);
@@ -128,7 +128,6 @@
   };
 
   filterLevelPin.addEventListener('mousedown', onFilterLevelChange);
-
 
   var setFilterLevel = function (level) {
     switch (currentFilter) {

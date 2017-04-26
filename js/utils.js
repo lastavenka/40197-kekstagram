@@ -13,15 +13,15 @@ window.utils = (function () {
   return {
     isKeyboardEvent: isKeyboardEvent,
 
-    onEscPress: function (evt, func) {
+    onEscPress: function (evt, applyFunction) {
       if (isKeyboardEvent(evt) && evt.keyCode === ESCAPE_KEY_CODE) {
-        func();
+        applyFunction();
       }
     },
 
-    onEnterPress: function (evt, func) {
+    onEnterPress: function (evt, applyFunction) {
       if (isKeyboardEvent(evt) && evt.keyCode === ENTER_KEY_CODE) {
-        func(evt);
+        applyFunction(evt);
       }
     },
 
@@ -38,9 +38,9 @@ window.utils = (function () {
     },
 
     getRandom: function (min, max) {
-      var rand = min + Math.random() * (max + 1 - min);
-      rand = Math.floor(rand);
-      return rand;
+      var randomValue = min + Math.random() * (max + 1 - min);
+      randomValue = Math.floor(randomValue);
+      return randomValue;
     },
 
     onError: function (evt) {
@@ -53,10 +53,10 @@ window.utils = (function () {
       }
     },
 
-    debounce: function (func, wait, immediate) {
+    debounce: function (applyFunction, waitingInterval, immediateCalling) {
       if (!timeout) {
-        func();
-        immediate = true;
+        applyFunction();
+        immediateCalling = true;
       }
 
       timeout = true;
@@ -66,11 +66,11 @@ window.utils = (function () {
       }
 
       lastTimeout = setTimeout(function () {
-        if (!immediate) {
-          func();
+        if (!immediateCalling) {
+          applyFunction();
         }
         timeout = false;
-      }, wait);
+      }, waitingInterval);
     }
   };
 })();
