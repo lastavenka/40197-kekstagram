@@ -1,29 +1,29 @@
 'use strict';
 
 window.preview = (function () {
-  var onGalleryOverlayOpen = function (evt) {
-    var galleryOverlay = document.querySelector('.gallery-overlay');
+  var onPreviewOpen = function (evt) {
+    var preview = document.querySelector('.gallery-overlay');
 
-    var setGalleryOverlay = function () {
-      galleryOverlay.querySelector('.gallery-overlay-image').src = evt.currentTarget.querySelector('img').src;
-      galleryOverlay.querySelector('.likes-count').textContent = evt.currentTarget.querySelector('.picture-likes').textContent;
-      galleryOverlay.querySelector('.comments-count').textContent = evt.currentTarget.querySelector('.picture-comments').textContent;
+    var setPreview = function () {
+      preview.querySelector('.gallery-overlay-image').src = evt.currentTarget.querySelector('img').src;
+      preview.querySelector('.likes-count').textContent = evt.currentTarget.querySelector('.picture-likes').textContent;
+      preview.querySelector('.comments-count').textContent = evt.currentTarget.querySelector('.picture-comments').textContent;
     };
-    setGalleryOverlay();
+    setPreview();
 
-    window.utils.showElement(galleryOverlay);
+    window.utils.showElement(preview);
     document.addEventListener('keydown', function (e) {
-      window.utils.onEscPress(e, window.gallery.onGalleryOverlayClose);
+      window.utils.onEscPress(e, window.gallery.onPreviewClose);
     });
   };
 
-  var galleryOverlayCloseButton = document.querySelector('.gallery-overlay-close');
-  galleryOverlayCloseButton.addEventListener('click', window.gallery.onGalleryOverlayClose);
-  galleryOverlayCloseButton.addEventListener('keydown', function (evt) {
-    window.utils.onEnterPress(evt, window.gallery.onGalleryOverlayClose);
+  var previewCloseButton = document.querySelector('.gallery-overlay-close');
+  previewCloseButton.addEventListener('click', window.gallery.onPreviewClose);
+  previewCloseButton.addEventListener('keydown', function (evt) {
+    window.utils.onEnterPress(evt, window.gallery.onPreviewClose);
   });
 
   return {
-    onGalleryOverlayOpen: onGalleryOverlayOpen
+    onPreviewOpen: onPreviewOpen
   };
 })();

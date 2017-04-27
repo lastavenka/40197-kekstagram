@@ -1,17 +1,16 @@
 'use strict';
 
 window.gallery = (function () {
+  var onPreviewClose = function () {
+    var preview = document.querySelector('.gallery-overlay');
 
-  var onGalleryOverlayClose = function () {
-    var galleryOverlay = document.querySelector('.gallery-overlay');
-
-    window.utils.hideElement(galleryOverlay);
+    window.utils.hideElement(preview);
     document.removeEventListener('keydown', function (evt) {
-      window.utils.onEscPress(evt, window.onGalleryOverlayClose);
+      window.utils.onEscPress(evt, window.onPreviewClose);
     });
   };
 
   return {
-    onGalleryOverlayClose: onGalleryOverlayClose
+    onPreviewClose: onPreviewClose
   };
 })();
