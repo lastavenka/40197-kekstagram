@@ -88,11 +88,11 @@
   var filterLevelValue = filterControls.querySelector('.upload-filter-level-val');
   var filterLevel = filterControls.querySelector('.upload-filter-level');
   var FILTER_NAMES = {
-    filterChrome: 'filter-chrome',
-    filterSepia: 'filter-sepia',
-    filterMarvin: 'filter-marvin',
-    filterPhobos: 'filter-phobos',
-    filterHeat: 'filter-heat'
+    chrome: 'filter-chrome',
+    sepia: 'filter-sepia',
+    marvin: 'filter-marvin',
+    phobos: 'filter-phobos',
+    heat: 'filter-heat'
   };
   window.utils.hideElement(filterLevel);
 
@@ -138,19 +138,19 @@
 
   var setFilterLevel = function (level) {
     switch (currentFilter) {
-      case FILTER_NAMES.filterChrome:
+      case FILTER_NAMES.chrome:
         imagePreview.style.filter = 'grayscale(' + level / 100 + ')';
         break;
-      case FILTER_NAMES.filterSepia:
+      case FILTER_NAMES.sepia:
         imagePreview.style.filter = 'sepia(' + level / 100 + ')';
         break;
-      case FILTER_NAMES.filterMarvin:
+      case FILTER_NAMES.marvin:
         imagePreview.style.filter = 'invert(' + level + '%)';
         break;
-      case FILTER_NAMES.filterPhobos:
+      case FILTER_NAMES.phobos:
         imagePreview.style.filter = 'blur(' + level * 3 / 100 + 'px)';
         break;
-      case FILTER_NAMES.filterHeat:
+      case FILTER_NAMES.heat:
         imagePreview.style.filter = 'brightness(' + level * 3 / 100 + ')';
         break;
     }
