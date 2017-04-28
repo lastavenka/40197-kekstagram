@@ -62,26 +62,29 @@
   var onFilterClick = function (evt) {
     var picturesList = [];
     var newPicturesCount = 10;
+    var FILTER_VALUES = {
+      new: 'new',
+      popular: 'popular',
+      discussed: 'discussed'
+    };
     var sortRandom = function () {
       return Math.random() - 0.5;
     };
     var sortCompare = function (picture1, picture2) {
       if (picture2.comments.length !== picture1.comments.length) {
-        var shift = picture2.comments.length - picture1.comments.length;
-      } else {
-        shift = picture2.likes - picture1.likes;
+        return (picture2.comments.length - picture1.comments.length);
       }
-      return shift;
+      return (picture2.likes - picture1.likes);
     };
 
     switch (evt.target.value) {
-      case 'popular':
+      case FILTER_VALUES.popular:
         picturesList = pictures;
         break;
-      case 'new':
+      case FILTER_VALUES.new:
         picturesList = pictures.slice().sort(sortRandom).slice(0, newPicturesCount);
         break;
-      case 'discussed':
+      case FILTER_VALUES.discussed:
         picturesList = pictures.slice().sort(sortCompare);
         break;
     }
