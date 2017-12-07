@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/kekstagram/data';
+  var URL = 'https://1510.dump.academy/kekstagram/data';
   var pictures = [];
   var DEBOUNCE_INTERVAL = 500;
 
